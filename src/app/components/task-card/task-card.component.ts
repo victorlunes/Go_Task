@@ -15,7 +15,10 @@ export class TaskCardComponent {
   }
 
   openModalEdit() {
-    this._modalControllerService.openEditTaskModal()
+    this._modalControllerService.openEditTaskModal({
+      name: 'Nome Tarefa',
+      description: 'descrição tarefa'
+    })
   }
 
 }

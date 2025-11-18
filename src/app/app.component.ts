@@ -6,7 +6,7 @@ import { TaskCommentsModalComponent } from './components/task-comments-modal/tas
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, MainContentComponent, TaskFormModalComponent, TaskCommentsModalComponent],
+  imports: [HeaderComponent, MainContentComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
