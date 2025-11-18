@@ -9,15 +9,21 @@
             <p class="font-semibold text-sm mb-2">Nome:</p>
             <input class="w-full border border-[#D1D5DB] p-3 rounded-lg text-sm font-light text-[#89919F]" type="text"
                 placeholder="Descreva o que deverá ser feito" formControlName="name">
+            @if (taskForm.get('name')?.touched && taskForm.get('name')?.invalid) {
             <p class="font-semibold text-sm text-red-500">O campo é obrigatório e precisa ter no minímo 10 caracteres.
             </p>
+            }
+
         </div>
         <div>
             <p class="font-semibold text-sm mb-2">Descrição</p>
             <input class="w-full border border-[#D1D5DB] p-3 rounded-lg text-sm font-light text-[#89919F]" type="text"
                 placeholder="Adicione uma descrição" formControlName="description">
+            @if (taskForm.get('description')?.touched && taskForm.get('description')?.invalid) {
             <p class="font-semibold text-sm text-red-500">O campo é obrigatório e precisa ter no minímo 10 caracteres.
             </p>
+            }
+
         </div>
     </div>
     <div class="p-4 flex justify-end gap-3">
