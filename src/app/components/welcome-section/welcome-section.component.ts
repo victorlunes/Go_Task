@@ -11,6 +11,8 @@ export class WelcomeSectionComponent {
   private readonly _modalControllerService = inject(ModalControllerService)
 
   openModal() {
-    this._modalControllerService.openNewTaskModal()
+    const dialogRef = this._modalControllerService.openNewTaskModal()
+    dialogRef.closed.subscribe((taskForm) => {
+    });
   }
 }
