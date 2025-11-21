@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TaskCardComponent } from "../task-card/task-card.component";
+import { TaskService } from '../../Services/task.service';
 
 @Component({
   selector: 'app-task-list-section',
