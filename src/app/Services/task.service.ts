@@ -4,6 +4,7 @@ import { ITask } from "../interfaces/task.interface";
 import { ITaskFormControls } from "../interfaces/task-form-controls.interface";
 import { generateUniqueIdWithTimestamp } from "../utils/generate-unique-id-with-timestamp";
 import { TaskStatusEnum } from "../enums/task.status.enum";
+import { TaskStatus } from "../types/task-status";
 
 @Injectable({
     providedIn:
@@ -11,10 +12,22 @@ import { TaskStatusEnum } from "../enums/task.status.enum";
 })
 
 export class TaskService {
-    //task
+    //A Fazer
     private todoTask$ = new BehaviorSubject<ITask[]>([]);
-
     readonly todoTasks = this.todoTask$.asObservable().pipe(
+        map((tasks) => structuredClone(tasks))
+    )
+
+    //Tarefas Fazendo
+
+    private doingTask$ = new BehaviorSubject<ITask[]>([]);
+    readonly doingTasks = this.doingTask$.asObservable().pipe(
+        map((tasks) => structuredClone(tasks))
+    )
+
+    //Tarefa Concluida
+    private doneTask$ = new BehaviorSubject<ITask[]>([]);
+    readonly doneTasks = this.doneTask$.asObservable().pipe(
         map((tasks) => structuredClone(tasks))
     )
 
@@ -29,5 +42,31 @@ export class TaskService {
 
         const currentList = this.todoTask$.value;
         this.todoTask$.next([...currentList, task]);
+    }
+
+    updateTaskStatus(taskId: string, TaskCurrentStatus: TaskStatus, taskNextStatus: TaskStatus) {
+        const currentTaskList = this.getTaskListByStatus(TaskCurrentStatus)
+        const nextTasklist = this.getTaskListByStatus(taskNextStatus)
+        const currentTask = currentTaskList.value.find(
+            (task) => task.id === taskId)
+
+        if (currentTask) {
+            currentTask.status = taskNextStatus
+
+            const currentTaskListWithoutTask = currentTaskList.value.filter((task) => task.id !== taskId,);
+            currentTaskList.next([...currentTaskListWithoutTask]);
+
+            nextTasklist.next([...nextTasklist.value, { ...currentTask }])
+        }
+    }
+
+    private getTaskListByStatus(TaskStatus: TaskStatus) {
+        const taskListObj = {
+            [TaskStatusEnum.TODO]: this.todoTask$,
+            [TaskStatusEnum.DOING]: this.doingTask$,
+            [TaskStatusEnum.DONE]: this.doneTask$,
+        }
+
+        return taskListObj[TaskStatus]
     }
 }
