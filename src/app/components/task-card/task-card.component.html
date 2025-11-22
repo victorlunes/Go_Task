@@ -1,12 +1,13 @@
 <div class="p-3 bg-[#FAFAFA] rounded-xl cursor-grab flex flex-col gap-3">
     <div class="flex gap-1">
-        <p class="font-bold">nova tarefa</p>
+        <p class="font-bold"> {{task.name}} </p>
         <img class="self-start cursor-pointer ml-auto" src="images/icon-delete.svg" alt=" icon delete">
     </div>
-    <p class="font-light text-sm text-[#374151]"> minha tarefa para criar aplicação angular</p>
+    <p class="font-light text-sm text-[#374151]"> {{task.description}} </p>
     <div class="flex items-center gap-1">
         <img src="images/icon-comments.svg" alt="icon comments">
-        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer" (click)="openModalComments()">2 Comentarios</p>
+        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer" (click)="openModalComments()">
+            {{task.comments.length}} Comentarios</p>
         <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer ml-auto" (click)="openModalEdit()">Editar</p>
     </div>
 </div>
