@@ -1,12 +1,12 @@
 import { Component, inject, Input } from '@angular/core';
 import { ModalControllerService } from '../../Services/modal-controller.service';
 import { ITask } from '../../interfaces/task.interface';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, SlicePipe } from '@angular/common';
 import { TaskService } from '../../Services/task.service';
 
 @Component({
   selector: 'app-task-card',
-  imports: [],
+  imports: [SlicePipe],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.css'
 })
