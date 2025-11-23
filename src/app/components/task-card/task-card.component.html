@@ -6,8 +6,8 @@
     <p class="font-light text-sm text-[#374151]"> {{task.description}} </p>
     <div class="flex items-center gap-1">
         <img src="images/icon-comments.svg" alt="icon comments">
-        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer" (click)="openModalComments()">
+        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer" (click)="openModalTaskEditCommentsModal()">
             {{task.comments.length}} Comentarios</p>
-        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer ml-auto" (click)="openModalEdit()">Editar</p>
+        <p class="font-semibold text-xs text-[#7D72F8] cursor-pointer ml-auto" (click)="openModalTaskEdit()">Editar</p>
     </div>
 </div>

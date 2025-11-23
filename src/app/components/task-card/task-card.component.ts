@@ -16,11 +16,7 @@ export class TaskCardComponent {
   private readonly _modalControllerService = inject(ModalControllerService)
   private readonly _taskService = inject(TaskService)
 
-  openModalComments() {
-    this._modalControllerService.openTaskCommentsModal()
-  }
-
-  openModalEdit() {
+  openModalTaskEdit() {
     const dialogRef = this._modalControllerService.openEditTaskModal({
       name: this.task.name,
       description: this.task.description
@@ -31,6 +27,14 @@ export class TaskCardComponent {
         this._taskService.updateTaskNameAndDescription(this.task.id, this.task.status, taskForm.name, taskForm.description)
       }
     })
+  }
+
+  openModalTaskEditCommentsModal() {
+    this.task.comments = [
+      { id: '123', description: 'comentario 1' },
+      { id: '1333', description: 'comentario 2' }
+    ]
+    this._modalControllerService.openTaskCommentsModal(this.task)
   }
 
 }
