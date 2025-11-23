@@ -39,4 +39,8 @@ export class TaskCardComponent {
     })
   }
 
+  deletTask() {
+    this._taskService.deleteTask(this.task.id, this.task.status)
+  }
+
 }
