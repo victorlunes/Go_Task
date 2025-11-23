@@ -37,6 +37,19 @@ export class TaskCommentsModalComponent {
     this.commentInputRef.nativeElement.focus();
   }
 
+  onRemoveModal(commentId: string) {
+    console.log(this._task.comments)
+
+    const currentListComment = this._task.comments.filter((comment) => comment.id !== commentId)
+
+    this._task.comments = [...currentListComment]
+
+    console.log(this._task.comments)
+
+    this.taskCommentsChanged = true
+
+  }
+
   onCloseModal() {
     this._dialogRef.close(this.taskCommentsChanged)
   }
