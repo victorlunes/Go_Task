@@ -13,14 +13,11 @@ import { IComment } from "../interfaces/comment.interface";
 })
 
 export class TaskService {
-    //A Fazer
     private todoTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.TODO));
     readonly todoTasks = this.todoTask$.asObservable().pipe(
         map((tasks) => structuredClone(tasks)),
         tap((tasks) => this.saveTaskOnLocalStorage(TaskStatusEnum.TODO, tasks))
     )
-
-    //Tarefas Fazendo
 
     private doingTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.DOING));
     readonly doingTasks = this.doingTask$.asObservable().pipe(
@@ -28,7 +25,6 @@ export class TaskService {
         tap((tasks) => this.saveTaskOnLocalStorage(TaskStatusEnum.DOING, tasks))
     )
 
-    //Tarefa Concluida
     private doneTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.DONE));
     readonly doneTasks = this.doneTask$.asObservable().pipe(
         map((tasks) => structuredClone(tasks)),
@@ -52,60 +48,58 @@ export class TaskService {
         const currentTaskList = this.getTaskListByStatus(TaskCurrentStatus)
         const nextTasklist = this.getTaskListByStatus(taskNextStatus)
         const currentTask = currentTaskList.value.find(
-            (task) => task.id === taskId)
+            (task) => task.id === taskId);
 
         if (currentTask) {
-            currentTask.status = taskNextStatus
+            currentTask.status = taskNextStatus;
 
             const currentTaskListWithoutTask = currentTaskList.value.filter((task) => task.id !== taskId,);
             currentTaskList.next([...currentTaskListWithoutTask]);
 
-            nextTasklist.next([...nextTasklist.value, { ...currentTask }])
+            nextTasklist.next([...nextTasklist.value, { ...currentTask }]);
         }
     }
 
     updateTaskNameAndDescription(taskId: string, taskCurrentStatus: TaskStatus, newTaskName: string, newTaskDescriprion: string) {
-        const taskCurrentlist = this.getTaskListByStatus(taskCurrentStatus)
-        let updateTaskList = taskCurrentlist.value
+        const taskCurrentlist = this.getTaskListByStatus(taskCurrentStatus);
+        let updateTaskList = taskCurrentlist.value;
 
-        updateTaskList = updateTaskList.map((task) => task.id === taskId ? { ...task, name: newTaskName, description: newTaskDescriprion } : task)
+        updateTaskList = updateTaskList.map((task) => task.id === taskId ? { ...task, name: newTaskName, description: newTaskDescriprion } : task);
 
-        taskCurrentlist.next(updateTaskList)
+        taskCurrentlist.next(updateTaskList);
     }
 
     updateComments(taskId: string, taskCurrentStatus: TaskStatus, newTaskComments: IComment[]) {
-        const taskCurrentlist = this.getTaskListByStatus(taskCurrentStatus)
+        const taskCurrentlist = this.getTaskListByStatus(taskCurrentStatus);
 
-        let updateTaskList = taskCurrentlist.value
+        let updateTaskList = taskCurrentlist.value;
 
-        updateTaskList = updateTaskList.map((task) => task.id === taskId ? { ...task, comments: newTaskComments } : task)
+        updateTaskList = updateTaskList.map((task) => task.id === taskId ? { ...task, comments: newTaskComments } : task);
 
-        taskCurrentlist.next(updateTaskList)
-
-        console.log(updateTaskList)
+        taskCurrentlist.next(updateTaskList);
     }
 
     deleteTask(taskId: string, TaskCurrentStatus: TaskStatus) {
-        const currentTaskList = this.getTaskListByStatus(TaskCurrentStatus)
+        const currentTaskList = this.getTaskListByStatus(TaskCurrentStatus);
         const newTaskList = currentTaskList.value.filter((task) => task.id !== taskId,);
         currentTaskList.next([...newTaskList]);
     }
 
     private loadTasksFromLocalStorage(key: string) {
         try {
-            const storedTasks = localStorage.getItem(key)
-            return storedTasks ? JSON.parse(storedTasks) : []
+            const storedTasks = localStorage.getItem(key);
+            return storedTasks ? JSON.parse(storedTasks) : [];
         } catch (error) {
-            console.log('Erro ao exibir tarefas', error)
-            return []
+            console.log('Erro ao exibir tarefas', error);
+            return [];
         }
     }
 
     private saveTaskOnLocalStorage(key: string, tasks: ITask[]) {
         try {
-            localStorage.setItem(key, JSON.stringify(tasks))
+            localStorage.setItem(key, JSON.stringify(tasks));
         } catch (error) {
-            console.log('Erro ao salvar tarefas', error)
+            console.log('Erro ao salvar tarefas', error);
         }
     }
 
@@ -116,6 +110,6 @@ export class TaskService {
             [TaskStatusEnum.DONE]: this.doneTask$,
         }
 
-        return taskListObj[TaskStatus]
+        return taskListObj[TaskStatus];
     }
 }

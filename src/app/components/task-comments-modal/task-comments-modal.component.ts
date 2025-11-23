@@ -12,15 +12,15 @@ import { ITask } from '../../interfaces/task.interface';
   styleUrl: './task-comments-modal.component.css'
 })
 export class TaskCommentsModalComponent {
-  taskCommentsChanged = false
+  taskCommentsChanged = false;
 
-  commentControl = new FormControl('', [Validators.required])
+  commentControl = new FormControl('', [Validators.required]);
 
   @ViewChild('commentInput') commentInputRef!: ElementRef<HTMLInputElement>
 
-  readonly _task: ITask = inject(DIALOG_DATA)
+  readonly _task: ITask = inject(DIALOG_DATA);
 
-  readonly _dialogRef: DialogRef<boolean> = inject(DialogRef)
+  readonly _dialogRef: DialogRef<boolean> = inject(DialogRef);
 
   onAddComment() {
     const newComment: IComment = {
@@ -28,29 +28,24 @@ export class TaskCommentsModalComponent {
       description: this.commentControl.value ? this.commentControl.value : ''
     }
 
-    this._task.comments.unshift(newComment)
+    this._task.comments.unshift(newComment);
 
-    this.commentControl.reset()
+    this.commentControl.reset();
 
-    this.taskCommentsChanged = true
+    this.taskCommentsChanged = true;
 
     this.commentInputRef.nativeElement.focus();
   }
 
   onRemoveModal(commentId: string) {
-    console.log(this._task.comments)
+    const currentListComment = this._task.comments.filter((comment) => comment.id !== commentId);
 
-    const currentListComment = this._task.comments.filter((comment) => comment.id !== commentId)
+    this._task.comments = [...currentListComment];
 
-    this._task.comments = [...currentListComment]
-
-    console.log(this._task.comments)
-
-    this.taskCommentsChanged = true
-
+    this.taskCommentsChanged = true;
   }
 
   onCloseModal() {
-    this._dialogRef.close(this.taskCommentsChanged)
+    this._dialogRef.close(this.taskCommentsChanged);
   }
 }
