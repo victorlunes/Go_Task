@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map } from "rxjs";
+import { BehaviorSubject, map, take, tap } from "rxjs";
 import { ITask } from "../interfaces/task.interface";
 import { ITaskFormControls } from "../interfaces/task-form-controls.interface";
 import { generateUniqueIdWithTimestamp } from "../utils/generate-unique-id-with-timestamp";
@@ -14,22 +14,25 @@ import { IComment } from "../interfaces/comment.interface";
 
 export class TaskService {
     //A Fazer
-    private todoTask$ = new BehaviorSubject<ITask[]>([]);
+    private todoTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.TODO));
     readonly todoTasks = this.todoTask$.asObservable().pipe(
-        map((tasks) => structuredClone(tasks))
+        map((tasks) => structuredClone(tasks)),
+        tap((tasks) => this.saveTaskOnLocalStorage(TaskStatusEnum.TODO, tasks))
     )
 
     //Tarefas Fazendo
 
-    private doingTask$ = new BehaviorSubject<ITask[]>([]);
+    private doingTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.DOING));
     readonly doingTasks = this.doingTask$.asObservable().pipe(
-        map((tasks) => structuredClone(tasks))
+        map((tasks) => structuredClone(tasks)),
+        tap((tasks) => this.saveTaskOnLocalStorage(TaskStatusEnum.DOING, tasks))
     )
 
     //Tarefa Concluida
-    private doneTask$ = new BehaviorSubject<ITask[]>([]);
+    private doneTask$ = new BehaviorSubject<ITask[]>(this.loadTasksFromLocalStorage(TaskStatusEnum.DONE));
     readonly doneTasks = this.doneTask$.asObservable().pipe(
-        map((tasks) => structuredClone(tasks))
+        map((tasks) => structuredClone(tasks)),
+        tap((tasks) => this.saveTaskOnLocalStorage(TaskStatusEnum.DONE, tasks))
     )
 
     addTask(taskInfos: ITaskFormControls) {
@@ -86,6 +89,24 @@ export class TaskService {
         const currentTaskList = this.getTaskListByStatus(TaskCurrentStatus)
         const newTaskList = currentTaskList.value.filter((task) => task.id !== taskId,);
         currentTaskList.next([...newTaskList]);
+    }
+
+    private loadTasksFromLocalStorage(key: string) {
+        try {
+            const storedTasks = localStorage.getItem(key)
+            return storedTasks ? JSON.parse(storedTasks) : []
+        } catch (error) {
+            console.log('Erro ao exibir tarefas', error)
+            return []
+        }
+    }
+
+    private saveTaskOnLocalStorage(key: string, tasks: ITask[]) {
+        try {
+            localStorage.setItem(key, JSON.stringify(tasks))
+        } catch (error) {
+            console.log('Erro ao salvar tarefas', error)
+        }
     }
 
     private getTaskListByStatus(TaskStatus: TaskStatus) {
